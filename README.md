@@ -3,9 +3,9 @@ collaborated with Daniel Ulie
 
 Number and name of feature: #1: Display Images
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: 2 hrs
 
-Start time: 11:17am
+Start time: 11:30am
 
 Finish time: _____
 
