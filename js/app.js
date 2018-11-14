@@ -1,6 +1,6 @@
 
 'use strict';
-//DOG CONSTRUCTOR
+//Creature CONSTRUCTOR
 function Creature(creature) {        
   this.image_url = creature.image_url;
   this.title = creature.title;
@@ -12,41 +12,37 @@ function Creature(creature) {
 Creature.allCreatures = [];
 
 //---------------------
-//ADDING RENDER METHOD USING DOG.PROTOTYPE
+//ADDING RENDER METHOD USING CREATURE.PROTOTYPE
 Creature.prototype.render = function() {
   $('main').append('<div class="clone"></div>'); //APPENDS A DIV CLASS=CLONE TO MAIN (HTML TAG)
   let creatureClone = $('div[class="clone"]'); //HTML ELEMENT 
-  let creatureHtml = $('#creature-template').html(); //CONTENTS (INNERHTML) OF DOG-TEMPLATE
+  let creatureHtml = $('#photo-template').html(); //CONTENTS (INNERHTML) OF CREATURE-TEMPLATE
   creatureClone.html(creatureHtml) //CONTENTS OF DOGCLONE IS NOW DOGHTML
-  creatureClone.find('h2').text(this.title); //RETURNS FIRST H2 TAG AVAILABLE IN DOG-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
-  creatureClone.find('img').attr('src', this.image_url); //RETURNS FIRST IMG TAG AVAILABLE IN DOG-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
+  creatureClone.find('h2').text(this.title); //RETURNS FIRST H2 TAG AVAILABLE IN CREATURE-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
+  creatureClone.find('img').attr('src', this.image_url); //RETURNS FIRST IMG TAG AVAILABLE IN CREATURE-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
   creatureClone.find('p').text(this.description);
   creatureClone.find('p').text(this.keyword);//
   creatureClone.find('p').text(this.horns);
-  creatureClone.removeClass('clone'); //REMOVES #DOG-TEMPLATE CLASS
-  creatureClone.attr('class', this.name); //SETTING DOGCLONE ATTR TO THIS.NAME
+  creatureClone.removeClass('clone'); //REMOVES #CREATURE-TEMPLATE CLASS
+  creatureClone.attr('class', this.name); //SETTING CREATURECLONE ATTR TO THIS.NAME
 }
 Creature.readJson = () => {   //this is where we link to the data file
   $.get('../data/page-1.json', 'json')
     .then(data => {
       data.forEach(obj => {
-        Creature.allCreatures.push(new Creature(obj)); //PUSHES DOGS TO ALLDOGS[]
+        Creature.allCreatures.push(new Creature(obj)); //PUSHES CREATURE TO ALLDOGS[]
       })
     })
     .then(Creature.loadCreatures)
 }
-Creature.loadCreatures = () => { //CALLS THE RENDER FUNCTION FOR EACH DOG OBJ
+Creature.loadCreatures = () => { //CALLS THE RENDER FUNCTION FOR EACH CREATURE OBJ
   Creature.allCreatures.forEach(creature => creature.render())
 }
 $(() => Creature.readJson()); //CALLS READJSON
 
 
 
-// Collapse 
 
-// Message Input
-
-// Message Jacob Anderson
 
 
 
@@ -87,8 +83,3 @@ $(() => Creature.readJson()); //CALLS READJSON
 
 
 
-// Collapse 
-
-// Message Input
-
-// Message Jacob Anderson
