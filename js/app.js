@@ -1,85 +1,111 @@
-
 'use strict';
-//Creature CONSTRUCTOR
-function Creature(creature) {        
-  this.image_url = creature.image_url;
-  this.title = creature.title;
-  this.description = creature.description;
-  this.keyword = creature.keyword;
-  this.horns = creature.horns;
 
-}
-Creature.allCreatures = [];
 
-//---------------------
-//ADDING RENDER METHOD USING CREATURE.PROTOTYPE
-Creature.prototype.render = function() {
-  $('main').append('<div class="clone"></div>'); //APPENDS A DIV CLASS=CLONE TO MAIN (HTML TAG)
-  let creatureClone = $('div[class="clone"]'); //HTML ELEMENT 
-  let creatureHtml = $('#photo-template').html(); //CONTENTS (INNERHTML) OF CREATURE-TEMPLATE
-  creatureClone.html(creatureHtml) //CONTENTS OF DOGCLONE IS NOW DOGHTML
-  creatureClone.find('h2').text(this.title); //RETURNS FIRST H2 TAG AVAILABLE IN CREATURE-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
-  creatureClone.find('img').attr('src', this.image_url); //RETURNS FIRST IMG TAG AVAILABLE IN CREATURE-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
-  creatureClone.find('p').text(this.description);
-  creatureClone.find('p').text(this.keyword);//
-  creatureClone.find('p').text(this.horns);
-  creatureClone.removeClass('clone'); //REMOVES #CREATURE-TEMPLATE CLASS
-  creatureClone.attr('class', this.name); //SETTING CREATURECLONE ATTR TO THIS.NAME
+
+function Horns(horn) {
+  this.image_url = horn.image_url;
+  this.title = horn.title;
+  this.description = horn.description;
+  this.keyword = horn.keyword;
+  this.horns = horn.horns;
 }
-Creature.readJson = () => {   //this is where we link to the data file
-  $.get('../data/page-1.json', 'json')
-    .then(data => {
-      data.forEach(obj => {
-        Creature.allCreatures.push(new Creature(obj)); //PUSHES CREATURE TO ALLDOGS[]
-      })
+
+Horns.allHorns = [];
+
+
+
+Horns.prototype.render = function () {
+  const source   = $('#horn-template').html();
+  const template = Handlebars.compile(source);
+  return template(this);
+};
+
+const fillSelect = () => {
+  let selectMenuArray = ['Filter by Keyword'];
+  Horns.allHorns.forEach((object) => {
+    if (!selectMenuArray.includes(object.keyword)) {
+      selectMenuArray.push(object.keyword);
+    }
+  });
+  if ($('option').length <= 1 ) {
+    selectMenuArray.forEach( (value) => {
+      $('select').append(`<option value="${value}">${value}</option>`);
     })
-    .then(Creature.loadCreatures)
+  }
 }
-Creature.loadCreatures = () => { //CALLS THE RENDER FUNCTION FOR EACH CREATURE OBJ
-  Creature.allCreatures.forEach(creature => creature.render())
+
+
+Horns.readJson = (filename) => {
+  Horns.allHorns = [];
+  $.get(filename, 'json').then(data => {
+    data.forEach(obj => {
+      Horns.allHorns.push(new Horns(obj));
+    });
+  }).then(Horns.loadHorns).then(fillSelect)
+};
+
+Horns.loadHorns = () => {
+  Horns.sortHorns();
+  Horns.allHorns.forEach(horn => $('#photo-template').append(horn.render()));
 }
-$(() => Creature.readJson()); //CALLS READJSON
+
+Horns.sortHorns = () => {
+  $('div').remove();
+  if($('#number-horns')[0].checked) {
+    Horns.allHorns.sort((a,b) => a.horns - b.horns)
+  } else if($('#title-horn')[0].checked){
+    Horns.allHorns.sort((a,b) => {
+      a = a.title.toUpperCase();
+      b = b.title.toUpperCase();
+      if (a < b) {
+        return -1;
+      }
+      if (a > b) {
+        return 1;
+      }
+      return 0;
+    });
+  }
+}
 
 
+$('#hornfilter').on('change', function () {
+  let $selection = $(this).val();
+  if ($selection === 'Filter by Keyword') {
+    $('div').show();
+  } else {
+    $('div').hide();
+    $(`.${$selection}`).show();
+  }
+});
 
+$('#one').on('click', function () {
+  console.log('one clicked');
+  $('div').remove();
+  $('option').remove();
+  $(() => Horns.readJson('data/page-1.json'));
+});
 
+$('#two').on('click', function () {
+  console.log('two clicked');
+  $('div').remove();
+  $('option').remove();
+  $(() => Horns.readJson('data/page-2.json'));
 
+});
 
+$('#number-horns').on('change', function () {
+  Horns.loadHorns();
+});
 
-// 'use strict';
-// //DOG CONSTRUCTOR
-// function Dog(dog) {   
-//   this.name = dog.name;     
-//   this.image_url = dog.image_url;
-//   this.hobbies = dog.hobbies;
-// }
-// Dog.allDogs = [];
-// //---------------------
-// //ADDING RENDER METHOD USING DOG.PROTOTYPE
-// Dog.prototype.render = function() {
-//   $('main').append('<div class="clone"></div>'); //APPENDS A DIV CLASS=CLONE TO MAIN (HTML TAG)
-//   let dogClone = $('div[class="clone"]'); //HTML ELEMENT 
-//   let dogHtml = $('#dog-template').html(); //CONTENTS (INNERHTML) OF DOG-TEMPLATE
-//   dogClone.html(dogHtml) //CONTENTS OF DOGCLONE IS NOW DOGHTML
-//   dogClone.find('h2').text(this.name); //RETURNS FIRST H2 TAG AVAILABLE IN DOG-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
-//   dogClone.find('img').attr('src', this.image_url); //RETURNS FIRST IMG TAG AVAILABLE IN DOG-TEMPLATE CLASS AND SETS THE TEXT TO THIS.NAME
-//   dogClone.find('p').text(this.hobbies);
-//   dogClone.removeClass('clone'); //REMOVES #DOG-TEMPLATE CLASS
-//   dogClone.attr('class', this.name); //SETTING DOGCLONE ATTR TO THIS.NAME
-// }
-// Dog.readJson = () => {   //this is where we link to the data file
-//   $.get('data.json', 'json')
-//     .then(data => {
-//       data.forEach(obj => {
-//         Dog.allDogs.push(new Dog(obj)); //PUSHES DOGS TO ALLDOGS[]
-//       })
-//     })
-//     .then(Dog.loadDogs)
-// }
-// Dog.loadDogs = () => { //CALLS THE RENDER FUNCTION FOR EACH DOG OBJ
-//   Dog.allDogs.forEach(dog => dog.render())
-// }
-// $(() => Dog.readJson()); //CALLS READJSON
+$('#title-horn').change(function () {
+  Horns.loadHorns();
+});
 
+function pageLoad() {
+  $(() => Horns.readJson('data/page-1.json'));
+}
+
+pageLoad();
 
 

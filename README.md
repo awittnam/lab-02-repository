@@ -10,3 +10,15 @@ Start time: 11:30am
 Finish time: 1:15pm
 
 Actual time needed to complete: 1.75hrs
+
+Number and name of feature: #2: Drop Down Menu
+
+Estimate of time needed to complete: 1 hrs
+
+Start time: 11:00am
+
+Finish time: 12:25pm
+
+Actual time needed to complete: 1.50hrs
+
+was not able to finish with previous partners ouside of class.  completed with the assistanceof Becca/Heather/Andrew.
